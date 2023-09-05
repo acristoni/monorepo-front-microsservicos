@@ -20,7 +20,7 @@ export class UpdateOrderDto {
     example: 3,
     required: false,
   })
-  quantity?: string;
+  quantity?: number;
 
   @ApiProperty({
     description: 'Preço do pedido',

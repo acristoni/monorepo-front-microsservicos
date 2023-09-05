@@ -48,10 +48,24 @@ export class OrderService {
   }
 
   async update(id: string, updateOrderDto: UpdateOrderDto) {
-    return updateOrderDto.description;
+    await this.findOne(id);
+
+    return await this.orderRepository
+      .update(id, updateOrderDto)
+      .then(() => `Pedido id ${id} atualizado com sucesso!`)
+      .catch((error) => {
+        throw new InternalServerErrorException(error);
+      });
   }
 
   async remove(id: string) {
-    return id;
+    await this.findOne(id);
+
+    return await this.orderRepository
+      .delete({ id: id })
+      .then(() => `Pedido id ${id} excluído com sucesso!`)
+      .catch((error) => {
+        throw new InternalServerErrorException(error);
+      });
   }
 }
