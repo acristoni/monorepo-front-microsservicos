@@ -26,6 +26,9 @@ export class UserEntity {
   @Column({ type: 'varchar' })
   phone_number: string;
 
+  @Column({ type: 'boolean', default: true })
+  active: boolean;
+
   @Column({ type: 'date' })
   birth_date: Date;
 
