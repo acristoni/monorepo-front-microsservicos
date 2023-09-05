@@ -4,6 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -15,6 +16,7 @@ import { ValidacaoDataNascimento } from './utils/validacoes/dataNascimento.valid
 import { ValidacaoNome } from './utils/validacoes/nome.validacao';
 import { ValidacaoEmail } from './utils/validacoes/email.validacao';
 import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.validacao';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
@@ -26,6 +28,7 @@ export class UserService {
     private readonly validacaoNome: ValidacaoNome,
     private readonly validacaoEmail: ValidacaoEmail,
     private readonly validacaoNumeroTelefone: ValidacaoNumeroTelefone,
+    private jwtService: JwtService,
   ) {}
 
   getHello(): string {
@@ -96,11 +99,19 @@ export class UserService {
     }
 
     try {
-      const cliente = await this.userRepository.insert(createUserDto);
+      const newUser = new UserEntity();
+      newUser.email = createUserDto.email;
+      newUser.first_name = createUserDto.first_name;
+      newUser.last_name = createUserDto.last_name;
+      newUser.document = createUserDto.document;
+      newUser.phone_number = createUserDto.phone_number;
+      newUser.birth_date = new Date(createUserDto.birth_date);
+      newUser.setPassword(createUserDto.password);
+      await this.userRepository.save(newUser);
 
       return {
         message: 'Usuário criado com sucesso',
-        id: cliente.identifiers[0].id,
+        id: newUser.id,
       };
     } catch (error) {
       throw new InternalServerErrorException(error);
@@ -181,5 +192,30 @@ export class UserService {
       .catch((error) => {
         throw new InternalServerErrorException(error);
       });
+  }
+
+  async login(email: string, password: string): Promise<any> {
+    const user = await this.userRepository.findOne({ where: { email: email } });
+
+    if (!user) {
+      throw new UnauthorizedException('Senha ou email inválido');
+    }
+
+    if (user && !user.active) {
+      throw new UnauthorizedException(
+        'Usuário com esse e-mail foi desativado do sistema',
+      );
+    }
+
+    if (user && user.checkPassword(password)) {
+      const payload = { sub: user.id, email: user.email };
+      return {
+        access_token: this.jwtService.sign(payload, {
+          secret: process.env.SECRET_JWT,
+        }),
+      };
+    } else {
+      throw new UnauthorizedException('Senha ou email inválido');
+    }
   }
 }

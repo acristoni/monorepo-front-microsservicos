@@ -6,9 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -24,6 +25,26 @@ export class UserController {
   })
   getHello(): string {
     return this.userService.getHello();
+  }
+
+  @Get('login')
+  @ApiOperation({
+    summary: 'Tráz todos os clientes do banco de dados com paginação',
+  })
+  @ApiQuery({
+    name: 'email',
+    type: String,
+    description: 'e-mail do usuário',
+    example: 'qualquer@coisa.com.br',
+  })
+  @ApiQuery({
+    name: 'senha',
+    type: String,
+    description: 'senha do usuário',
+    example: 'S3nh4F#rt3',
+  })
+  async login(@Query('email') email: string, @Query('senha') senha: string) {
+    return await this.userService.login(email, senha);
   }
 
   @Get('find')
@@ -52,7 +73,7 @@ export class UserController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Atualiza os dados de um usuário, especificado pelo seu id',
+    summary: 'Atualiza os dados de um usuário.',
   })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(id, updateUserDto);
@@ -60,7 +81,7 @@ export class UserController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Desativa um usuário,  especificado pelo seu id',
+    summary: 'Desativa um usuário.',
   })
   async remove(@Param('id') id: string) {
     return await this.userService.remove(id);

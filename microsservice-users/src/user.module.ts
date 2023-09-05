@@ -9,6 +9,9 @@ import { ValidacaoCpf } from './utils/validacoes/cpf.validacao';
 import { UserEntity } from './user.entity';
 import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.validacao';
 import { ValidacaoEmail } from './utils/validacoes/email.validacao';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { LocalStrategy } from './local.strategy';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
@@ -27,6 +30,12 @@ import { ValidacaoEmail } from './utils/validacoes/email.validacao';
       entities: [UserEntity],
     }),
     TypeOrmModule.forFeature([UserEntity]),
+    PassportModule,
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET_JWT,
+      signOptions: { expiresIn: '60s' },
+    }),
   ],
   controllers: [UserController],
   providers: [
@@ -36,6 +45,8 @@ import { ValidacaoEmail } from './utils/validacoes/email.validacao';
     ValidacaoNome,
     ValidacaoNumeroTelefone,
     ValidacaoEmail,
+    LocalStrategy,
+    JwtService,
   ],
 })
 export class UserModule {}

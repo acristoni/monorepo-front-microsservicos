@@ -32,8 +32,14 @@ export class CreateUserDto {
   phone_number: string;
 
   @ApiProperty({
-    description: 'Data de nascimento do cliente',
+    description: 'Data de nascimento do usuário',
     example: '1990-01-01',
   })
   birth_date: string;
+
+  @ApiProperty({
+    description: 'Senha para login do usuário',
+    example: 'S3nh4F#rt3',
+  })
+  password: string;
 }

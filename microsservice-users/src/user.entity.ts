@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Entity('user')
 export class UserEntity {
@@ -31,6 +32,18 @@ export class UserEntity {
 
   @Column({ type: 'date' })
   birth_date: Date;
+
+  @Column({ type: 'varchar' })
+  password: string;
+
+  setPassword(password: string) {
+    const saltRounds = 10; // Número de rounds de salt (quanto maior, mais seguro)
+    this.password = bcrypt.hashSync(password, saltRounds);
+  }
+
+  checkPassword(password: string) {
+    return bcrypt.compareSync(password, this.password);
+  }
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
