@@ -2,15 +2,15 @@ version: '3.1'
 
 services:
 
-  db:
+  db_user:
     image: postgres
     restart: always
     environment:
       POSTGRES_PASSWORD: admim
-      POSTGRES_DB: user_microservice, order_microservice
+      POSTGRES_DB: user_microservice
     ports:
       - '5432:5432'
-
+      
   adminer:
     image: adminer
     restart: always
