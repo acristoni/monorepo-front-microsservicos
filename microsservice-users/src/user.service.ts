@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -31,12 +32,22 @@ export class UserService {
     return 'Api funcionando!';
   }
 
-  async findAll() {
-    return 'mnda geral';
+  async findAll(): Promise<UserEntity[]> {
+    try {
+      return await this.userRepository.find();
+    } catch (error) {
+      throw new InternalServerErrorException(error);
+    }
   }
 
-  async findOne(id: string) {
-    return id;
+  async findOne(id: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id: id } });
+
+    if (!user) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+
+    return user;
   }
 
   async create(createUserDto: CreateUserDto) {

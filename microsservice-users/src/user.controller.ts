@@ -30,7 +30,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Lista todos os usuários do sistema',
   })
-  async findAll() {
+  async findAll(): Promise<UserEntity[]> {
     return await this.userService.findAll();
   }
 
@@ -38,7 +38,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Exibe um usuário.',
   })
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string): Promise<UserEntity> {
     return await this.userService.findOne(id);
   }
 
