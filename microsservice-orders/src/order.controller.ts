@@ -27,7 +27,7 @@ export class OrderController {
 
   @Get('find')
   @ApiOperation({
-    summary: 'Lista todos os usuários do sistema',
+    summary: 'Lista todos os pedidos do sistema',
   })
   async findAll() {
     return await this.orderService.findAll();
@@ -35,7 +35,7 @@ export class OrderController {
 
   @Get('find/:id')
   @ApiOperation({
-    summary: 'Exibe o usuário com id passado no parâmetro',
+    summary: 'Exibe um pedido.',
   })
   async findOne(@Param('id') id: string) {
     return await this.orderService.findOne(id);
@@ -43,7 +43,7 @@ export class OrderController {
 
   @Post()
   @ApiOperation({
-    summary: 'Cria um novo usuário no sistema',
+    summary: 'Cria um novo pedido.',
   })
   async create(@Body() createOrderDto: CreateOrderDto) {
     return await this.orderService.create(createOrderDto);
@@ -51,7 +51,7 @@ export class OrderController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Atualiza os dados de um usuário especificado pelo seu id',
+    summary: 'Atualiza um pedido',
   })
   async update(
     @Param('id') id: string,
@@ -62,7 +62,7 @@ export class OrderController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Exclui os dados de um usuário especificado pelo seu id',
+    summary: 'Exclui um pedido',
   })
   async remove(@Param('id') id: string) {
     return await this.orderService.remove(id);

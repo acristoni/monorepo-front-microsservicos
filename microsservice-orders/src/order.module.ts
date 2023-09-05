@@ -11,6 +11,7 @@ import { OrderEntity } from './order.entity';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+    TypeOrmModule.forFeature([OrderEntity]),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: () => {
