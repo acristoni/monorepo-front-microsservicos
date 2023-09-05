@@ -1,15 +1,22 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
 import { OrderEntity } from './order.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { AuthMiddleware } from './auth.middleware';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.SECRET_JWT,
+      signOptions: { expiresIn: '60s' },
     }),
     TypeOrmModule.forFeature([OrderEntity]),
     TypeOrmModule.forRootAsync({
@@ -33,4 +40,8 @@ import { OrderEntity } from './order.entity';
   controllers: [OrderController],
   providers: [OrderService],
 })
-export class OrderModule {}
+export class OrderModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('*');
+  }
+}

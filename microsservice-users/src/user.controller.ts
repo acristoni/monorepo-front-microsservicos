@@ -101,4 +101,18 @@ export class UserController {
   async remove(@Param('id') id: string) {
     return await this.userService.remove(id);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @Get('validate')
+  @ApiOperation({
+    summary:
+      'Validação de token JWT, utilizado por outros microsserviços principalmente.',
+  })
+  validateToken() {
+    return {
+      message: 'token valido',
+      statusCode: 200,
+    };
+  }
 }
