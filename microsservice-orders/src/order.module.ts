@@ -4,6 +4,7 @@ import { OrderService } from './order.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOptions';
+import { OrderEntity } from './order.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { MysqlConnectionOptions } from 'typeorm/driver/mysql/MysqlConnectionOpti
           username: process.env.DATABASE_USER,
           password: process.env.DATABASE_PASSWORD,
           database: process.env.DATABASE_NAME,
-          entities: [],
+          entities: [OrderEntity],
           synchronize: true,
         };
         return mysqlConnectionOptions;
