@@ -16,7 +16,7 @@ export class UpdateUserDto {
   last_name?: string;
 
   @ApiProperty({
-    description: 'CPF ou RG do usuário',
+    description: 'CPF do usuário',
     example: '49317131069',
     required: false,
   })
@@ -30,8 +30,8 @@ export class UpdateUserDto {
   email?: string;
 
   @ApiProperty({
-    description: 'e-mail do usuário',
-    example: 'qualquer@coisa.com.br',
+    description: 'Telefone do usuário',
+    example: '1112341234',
     required: false,
   })
   phone_number?: string;

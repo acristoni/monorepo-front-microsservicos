@@ -14,7 +14,7 @@ export class CreateUserDto {
   last_name: string;
 
   @ApiProperty({
-    description: 'CPF ou RG do usuário',
+    description: 'CPF do usuário',
     example: '49317131069',
   })
   document: string;
@@ -26,8 +26,8 @@ export class CreateUserDto {
   email: string;
 
   @ApiProperty({
-    description: 'e-mail do usuário',
-    example: 'qualquer@coisa.com.br',
+    description: 'Telefone do usuário',
+    example: '1112341234',
   })
   phone_number: string;
 

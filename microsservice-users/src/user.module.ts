@@ -3,6 +3,12 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ValidacaoNome } from './utils/validacoes/nome.validacao';
+import { ValidacaoDataNascimento } from './utils/validacoes/dataNascimento.validacao';
+import { ValidacaoCpf } from './utils/validacoes/cpf.validacao';
+import { UserEntity } from './user.entity';
+import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.validacao';
+import { ValidacaoEmail } from './utils/validacoes/email.validacao';
 
 @Module({
   imports: [
@@ -18,11 +24,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       database: process.env.POSTGRES_DATABASE,
       synchronize: true,
       logging: false,
-      entities: [],
+      entities: [UserEntity],
     }),
-    TypeOrmModule.forFeature([]),
+    TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [
+    UserService,
+    ValidacaoCpf,
+    ValidacaoDataNascimento,
+    ValidacaoNome,
+    ValidacaoNumeroTelefone,
+    ValidacaoEmail,
+  ],
 })
-export class AppModule {}
+export class UserModule {}
