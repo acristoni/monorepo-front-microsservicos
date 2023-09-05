@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderEntity } from './order.entity';
@@ -16,12 +20,18 @@ export class OrderService {
     return 'Microsserviço de pedidos em funcionamento!';
   }
 
-  async findAll() {
-    return 'mnda geral';
+  async findAll(): Promise<OrderEntity[]> {
+    return await this.orderRepository.find();
   }
 
   async findOne(id: string) {
-    return id;
+    const order = await this.orderRepository.findOne({ where: { id: id } });
+
+    if (!order) {
+      throw new NotFoundException('Pedido não encontrado');
+    }
+
+    return order;
   }
 
   async create(createOrderDto: CreateOrderDto) {
