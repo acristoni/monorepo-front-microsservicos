@@ -36,7 +36,7 @@ export class UserController {
 
   @Get('find/:id')
   @ApiOperation({
-    summary: 'Exibe o usuário com id passado no parâmetro',
+    summary: 'Exibe um usuário.',
   })
   async findOne(@Param('id') id: string) {
     return await this.userService.findOne(id);
@@ -52,7 +52,7 @@ export class UserController {
 
   @Patch(':id')
   @ApiOperation({
-    summary: 'Atualiza os dados de um usuário especificado pelo seu id',
+    summary: 'Atualiza os dados de um usuário, especificado pelo seu id',
   })
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return await this.userService.update(id, updateUserDto);
@@ -60,7 +60,7 @@ export class UserController {
 
   @Delete(':id')
   @ApiOperation({
-    summary: 'Exclui os dados de um usuário especificado pelo seu id',
+    summary: 'Desativa um usuário,  especificado pelo seu id',
   })
   async remove(@Param('id') id: string) {
     return await this.userService.remove(id);
