@@ -80,7 +80,7 @@ export class UserService {
       throw new HttpException('e-mail inválido', HttpStatus.BAD_REQUEST);
     }
 
-    if (!this.validacaoNome.validar(createUserDto.first_name)) {
+    if (!this.validacaoNome.validar(createUserDto.last_name)) {
       throw new HttpException(
         'Sobrenome nome inválido',
         HttpStatus.BAD_REQUEST,
@@ -108,10 +108,78 @@ export class UserService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    return updateUserDto.first_name;
+    if (
+      updateUserDto.document &&
+      !this.validacaoCpf.validar(updateUserDto.document)
+    ) {
+      throw new HttpException(
+        'CPF fora do padrão da Receita Federal',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      updateUserDto.birth_date &&
+      !this.validacaoDataNascimento.validar(updateUserDto.birth_date)
+    ) {
+      throw new HttpException(
+        'Data de nascimento inválida',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      updateUserDto.phone_number &&
+      !this.validacaoNumeroTelefone.validar(updateUserDto.phone_number)
+    ) {
+      throw new HttpException(
+        'Número de telefone inválido',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (
+      updateUserDto.first_name &&
+      !this.validacaoNome.validar(updateUserDto.first_name)
+    ) {
+      throw new HttpException('Primeiro nome inválido', HttpStatus.BAD_REQUEST);
+    }
+
+    if (
+      updateUserDto.email &&
+      !this.validacaoEmail.validar(updateUserDto.email)
+    ) {
+      throw new HttpException('e-mail inválido', HttpStatus.BAD_REQUEST);
+    }
+
+    if (
+      updateUserDto.last_name &&
+      !this.validacaoNome.validar(updateUserDto.last_name)
+    ) {
+      throw new HttpException(
+        'Sobrenome nome inválido',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    await this.findOne(id);
+
+    return await this.userRepository
+      .update(id, updateUserDto)
+      .then(() => `Usuário id ${id} atualizado com sucesso!`)
+      .catch((error) => {
+        throw new InternalServerErrorException(error);
+      });
   }
 
   async remove(id: string) {
-    return id;
+    await this.findOne(id);
+
+    return await this.userRepository
+      .update(id, { active: false })
+      .then(() => `Usuário id ${id} desativado com sucesso!`)
+      .catch((error) => {
+        throw new InternalServerErrorException(error);
+      });
   }
 }
