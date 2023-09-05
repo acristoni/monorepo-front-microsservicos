@@ -12,10 +12,10 @@ export class OrderEntity {
   id: string;
 
   @Column({ type: 'varchar' })
-  first_name: string;
+  user_id: string;
 
   @Column({ type: 'varchar' })
-  birth_date: string;
+  description: string;
 
   @Column({ type: 'int' })
   quantity: number;
