@@ -7,12 +7,19 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiQuery,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { AuthGuard } from './auth.guard';
 
 @ApiTags('Usuário')
 @Controller()
@@ -47,6 +54,8 @@ export class UserController {
     return await this.userService.login(email, senha);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('find')
   @ApiOperation({
     summary: 'Lista todos os usuários do sistema',
@@ -55,6 +64,8 @@ export class UserController {
     return await this.userService.findAll();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('find/:id')
   @ApiOperation({
     summary: 'Exibe um usuário.',
@@ -71,6 +82,8 @@ export class UserController {
     return await this.userService.create(createUserDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Patch(':id')
   @ApiOperation({
     summary: 'Atualiza os dados de um usuário.',
@@ -79,6 +92,8 @@ export class UserController {
     return await this.userService.update(id, updateUserDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Delete(':id')
   @ApiOperation({
     summary: 'Desativa um usuário.',

@@ -12,6 +12,7 @@ import { ValidacaoEmail } from './utils/validacoes/email.validacao';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { LocalStrategy } from './local.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { AuthGuard } from './auth.guard';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { PassportModule } from '@nestjs/passport';
     ValidacaoEmail,
     LocalStrategy,
     JwtService,
+    AuthGuard,
   ],
 })
 export class UserModule {}
