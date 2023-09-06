@@ -113,6 +113,7 @@ export class UserController {
       'Validação de token JWT, utilizado por outros microsserviços principalmente.',
   })
   validateToken() {
+    console.log('validacao');
     return {
       message: 'token valido',
       statusCode: 200,

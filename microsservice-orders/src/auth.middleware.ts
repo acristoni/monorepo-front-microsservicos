@@ -18,7 +18,7 @@ export class AuthMiddleware implements NestMiddleware {
         Authorization: token,
       };
 
-      const response = await fetch('http://localhost:3003/validate', {
+      const response = await fetch('http://microservice-users:3003/validate', {
         method: 'GET',
         headers: headersList,
       });

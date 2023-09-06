@@ -1,16 +1,16 @@
 version: '3.7'
 
 services:
-  frontend:
-    build:
-      context: ./front
-    ports:
-      - '3000:3000'
-    depends_on:
-      - db_user
-      - order_mariadb
-      - microservice-users
-      - microservice-orders
+  # frontend:
+  #   build:
+  #     context: ./front
+  #   ports:
+  #     - '3000:3000'
+  #   depends_on:
+  #     - db_user
+  #     - order_mariadb
+  #     - microservice-users
+  #     - microservice-orders
 
   db_user:
     image: postgres
@@ -20,12 +20,16 @@ services:
       POSTGRES_DB: user_microservice
     ports:
       - '5432:5432'
+    networks:
+      - dev-network
       
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - dev-network
       
   order_mariadb:
       container_name: ${CONTAINER_NAME:-dev-order_mariadb}
@@ -48,6 +52,8 @@ services:
       - '3003:3003'
     depends_on:
       - db_user
+    networks:
+      - dev-network
 
   microservice-orders:
     build:
