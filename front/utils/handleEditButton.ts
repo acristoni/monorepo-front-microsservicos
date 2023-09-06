@@ -1,7 +1,6 @@
 import { EstadoCivil } from "enums/estadocivil.enum";
-import { ClientDto } from "interfaces/clientDto.interface";
 
-export default function handleEditButton(params: any, setEditClient: (editClient: { clientDto: ClientDto, idClient: string }) => void) {
+export default function handleEditButton(params: any, setEditClient: (editClient: { clientDto: any, idClient: string }) => void) {
     let estadoCivilEdit: EstadoCivil;
 
     switch (params.row.estadoCivil) {
@@ -21,7 +20,7 @@ export default function handleEditButton(params: any, setEditClient: (editClient
         estadoCivilEdit = EstadoCivil.SOLTEIRO;
         break;
     }
-    const clientDto: ClientDto = {
+    const clientDto: any = {
         nome: params.row.nome,
         dataNascimento: params.row.dataNascimento,
         cpf: params.row.cpf,

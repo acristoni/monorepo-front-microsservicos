@@ -1,0 +1,66 @@
+version: '3.7'
+
+services:
+  # frontend:
+  #   build:
+  #     context: ./front
+  #   ports:
+  #     - '3000:3000'
+    # depends_on:
+      # - db_user
+      # - order_mariadb
+      # - microservice-users
+      # - microservice-orders
+
+  db_user:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: admim
+      POSTGRES_DB: user_microservice
+    ports:
+      - '5432:5432'
+      
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+      
+  order_mariadb:
+      container_name: ${CONTAINER_NAME:-dev-order_mariadb}
+      image: mariadb
+      environment:
+        - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+        - MYSQL_DATABASE=${MYSQL_ROOT_DATABASE:-order}
+
+      networks:
+        - dev-network
+      ports:
+        - '3306:3306'
+      volumes:
+      - ./data/db:/data/db
+
+  # microservice-users:
+  #   build:
+  #     context: ./microsservice-users
+  #   ports:
+  #     - '3003:3003'
+  #   depends_on:
+  #     - db_user
+
+  # microservice-orders:
+  #   build:
+  #     context: ./microsservice-orders
+  #   ports:
+  #     - '3333:3333'
+  #   depends_on:
+  #     - order_mariadb
+  #   networks:
+  #     - dev-network
+
+# DEV Network
+networks:
+  dev-network:
+    name: dev-order-network
+    driver: bridge
