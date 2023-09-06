@@ -7,6 +7,8 @@ import DataGridClients from '@/components/DataGrid';
 import Button from '@mui/material/Button';
 import getClients from '../../../service/getOrders.service';
 import { Order } from 'interfaces/order.interface';
+import { Drawer } from '@mui/material';
+import NewOrderForm from '@/components/NewOrderForm';
 
 export default function Gestao() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
@@ -62,6 +64,12 @@ export default function Gestao() {
           { !isDrawerOpen ? 'Novo Pedido' : 'Cancelar'}
         </Button>
       </Box>
+      <Drawer
+        anchor='right'
+        open={isDrawerOpen}
+      >
+        <NewOrderForm setIsDrawerOpen={setIsDrawerOpen}/>
+      </Drawer>
     </Box>
   );
 }

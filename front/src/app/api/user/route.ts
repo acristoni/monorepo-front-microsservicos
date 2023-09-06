@@ -13,7 +13,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST( request: NextRequest ) {
     const res = await request.json()
-    console.log("🚀 ~ file: route.ts:19 ~ POST ~ `${process.env.URL_USER_MS}/`:", `${process.env.URL_USER_MS}/`)
+
     try {    
         const response = await fetch(`${process.env.URL_USER_MS}/`, { 
             method: "POST",
@@ -24,7 +24,6 @@ export async function POST( request: NextRequest ) {
         });
 
         const responseString = await response.text();
-        console.log("🚀 ~ file: route.ts:26 ~ POST ~ responseString:", responseString)
         const message = JSON.parse(responseString).message
         return NextResponse.json({ message }, { status: response.status });
     } catch(err) {
