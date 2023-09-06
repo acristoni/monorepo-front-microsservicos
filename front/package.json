@@ -1,0 +1,37 @@
+{
+  "name": "front-cogna-cadastro-cliente",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "cypress": "cypress open",
+    "post-update": "echo \"codesandbox preview only, need an update\" && yarn upgrade --latest"
+  },
+  "dependencies": {
+    "@emotion/cache": "latest",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "latest",
+    "@mui/lab": "^5.0.0-alpha.142",
+    "@mui/material": "latest",
+    "@mui/x-data-grid": "^6.12.1",
+    "@mui/x-date-pickers": "^6.12.1",
+    "dayjs": "^1.11.9",
+    "next": "13.x",
+    "react": "18.x",
+    "react-dom": "18.x",
+    "react-resize-panel": "^0.3.5"
+  },
+  "devDependencies": {
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "cypress": "^13.1.0",
+    "eslint": "latest",
+    "eslint-config-next": "latest",
+    "typescript": "latest"
+  }
+}
