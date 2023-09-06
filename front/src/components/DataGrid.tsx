@@ -1,25 +1,24 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, ptBR } from '@mui/x-data-grid';
-import { Client } from 'interfaces/client.interface';
-import { ClientFormated } from 'interfaces/clientFormated.interface';
 import formatarCPF from 'utils/formatCpf';
 import upperCaseFirstLetter from 'utils/upperCaseFirstLetter';
 import formatStringToDate from 'utils/formatStringToDate';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'; 
 import ModalDeleteClient from './ModalDeleteClient';
-import { ClientDto } from 'interfaces/clientDto.interface';
 import { EstadoCivil } from 'enums/estadocivil.enum';
 import handleEditButton from 'utils/handleEditButton';
+import { Order } from 'interfaces/order.interface';
+import { OrderFormated } from 'interfaces/orderFormated.interface';
 
 type Props =  {
-  rows: Client[];
-  setEditClient: (editClient: { clientDto: ClientDto, idClient: string }) => void;
+  rows: Order[];
+  // setEditClient: (editClient: { clientDto: ClientDto, idClient: string }) => void;
 }
 
-export default function DataGridClients({ rows, setEditClient }: Props) {
-  const [rowsFormated, setRowsFormated] = useState<ClientFormated[]>([])
+export default function DataGridClients({ rows }: Props) {
+  const [rowsFormated, setRowsFormated] = useState<OrderFormated[]>([])
   const [delectedClient, setDelectedClient] = useState<string>()
   const [clientToDelete, setClientToDelete] = useState<string>()
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -27,38 +26,37 @@ export default function DataGridClients({ rows, setEditClient }: Props) {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
     {
-      field: 'nome',
-      headerName: 'Nome',
-      width: 200,
-    },
-    {
-      field: 'cpf',
-      headerName: 'CPF',
-      width: 125,
-    },
-    {
-      field: 'estadoCivil',
-      headerName: 'Estado Civil',
+      field: 'user_id',
+      headerName: 'Id Responsável',
       width: 100,
     },
     {
-      field: 'dataNascimento',
-      headerName: 'Data de Nascimento',
-      description: 'This column has a value getter and is not sortable.',
+      field: 'description',
+      headerName: 'Descrição',
+      width: 250,
+    },
+    {
+      field: 'quantity',
+      headerName: 'Quantidade',
+      width: 10,
+      type: 'number'
+    },
+    {
+      field: 'price',
+      headerName: 'Preço',
       width: 100,
-      type: 'date'
     },
     {
       field: 'updatedAt',
       headerName: 'Atualização',
-      description: 'Essa é a data da última atualização do cliente no nosso sistema.',
+      description: 'Essa é a data da última atualização do pedido no nosso sistema.',
       width: 100,
       type: 'date'
     },
     {
       field: 'createdAt',
       headerName: 'Criação',
-      description: 'Essa é a data que o cliente foi registrado no nosso sistema.',
+      description: 'Essa é a data que o pedido foi registrado no nosso sistema.',
       width: 100,
       type: 'date'
     },
@@ -94,7 +92,7 @@ export default function DataGridClients({ rows, setEditClient }: Props) {
       renderCell: (params) => (
         <button
         id="ButtonEditar"
-          onClick={()=>handleEditButton(params, setEditClient)}
+          // onClick={()=>handleEditButton(params, setEditClient)}
           style={{
             background: 'none',
             border: 'none',
@@ -109,15 +107,12 @@ export default function DataGridClients({ rows, setEditClient }: Props) {
 
   useEffect(()=>{
     if (rows) {
-      const arrayRowsFormated = rows.map((clientInfo: Client) => {
+      const arrayRowsFormated = rows.map((orderInfo: Order) => {
         return {
-          id: clientInfo.id,
-          nome: clientInfo.nome,
-          cpf: formatarCPF(clientInfo.cpf),
-          estadoCivil: upperCaseFirstLetter(clientInfo.estadoCivil),
-          dataNascimento: formatStringToDate(clientInfo.dataNascimento),
-          updatedAt: new Date(clientInfo.updatedAt),
-          createdAt: new Date(clientInfo.createdAt)
+          ...orderInfo,
+          price: `R$ ${orderInfo.price}`,
+          updatedAt: new Date(orderInfo.updatedAt),
+          createdAt: new Date(orderInfo.createdAt)
         }  
       })
       setRowsFormated(arrayRowsFormated);

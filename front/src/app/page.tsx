@@ -38,7 +38,7 @@ export default function SignIn() {
 
   useEffect(()=>{
     if (mensagemUsuario === 'Usuário logado com sucesso') {
-      router.push('/signup')
+      router.push('/gestao')
     }
   },[mensagemUsuario])
 
