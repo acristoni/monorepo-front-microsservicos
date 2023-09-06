@@ -9,19 +9,46 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import { login } from "service/login.service copy";
+import { useEffect, useState } from "react";
+import ModalComplete from "@/components/ModalComplete";
+import { useRouter } from 'next/navigation'
 
 export default function SignIn() {
-  const handleSubmit = (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [mensagemUsuario, setMensagemUsuario] = useState<string>("")
+  const router = useRouter()
+  
+  const handleSubmit = async (event: { preventDefault: () => void; currentTarget: HTMLFormElement | undefined; }) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    
+    const email = data.get("email") as string | null;
+    const password = data.get("password") as string | null;   
+
+    const response = await login({
+      email: email || "",
+      senha: password || "",
+    }, setMensagemUsuario);
+
+    if (response) {
+      setIsModalOpen(true)
+    }
   };
+
+  useEffect(()=>{
+    if (mensagemUsuario === 'Usuário logado com sucesso') {
+      router.push('/signup')
+    }
+  },[mensagemUsuario])
 
   return (
     <Container component="main" maxWidth="xs">
+      <ModalComplete 
+        setIsModalOpen={setIsModalOpen} 
+        isModalOpen={isModalOpen} 
+        mensagemUsuario={mensagemUsuario} 
+      />
       <Box
         sx={{  
           marginTop: 8,

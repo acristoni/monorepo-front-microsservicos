@@ -21,6 +21,7 @@
     "@mui/x-date-pickers": "^6.12.1",
     "dayjs": "^1.11.9",
     "next": "13.x",
+    "nookies": "^2.5.2",
     "react": "18.x",
     "react-dom": "18.x",
     "react-resize-panel": "^0.3.5"
