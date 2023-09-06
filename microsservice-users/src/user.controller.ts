@@ -50,7 +50,10 @@ export class UserController {
     description: 'senha do usuário',
     example: 'S3nh4F#rt3',
   })
-  async login(@Query('email') email: string, @Query('senha') senha: string) {
+  async login(
+    @Query('email') email: string,
+    @Query('senha') senha: string,
+  ): Promise<{ access_token: string }> {
     return await this.userService.login(email, senha);
   }
 

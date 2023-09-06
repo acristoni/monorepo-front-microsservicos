@@ -194,7 +194,10 @@ export class UserService {
       });
   }
 
-  async login(email: string, password: string): Promise<any> {
+  async login(
+    email: string,
+    password: string,
+  ): Promise<{ access_token: string }> {
     const user = await this.userRepository.findOne({ where: { email: email } });
 
     if (!user) {

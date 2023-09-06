@@ -13,7 +13,7 @@ import { mockRepositoryProvider } from './mock/repository.mock';
 import OrderDtoMock from './mock/orderDto.mock';
 import OrderMock from './mock/order.mock';
 
-describe('UserService', () => {
+describe('OrderService', () => {
   let orderService: OrderService;
   let orderRepository: Repository<OrderEntity>;
 
@@ -126,7 +126,7 @@ describe('UserService', () => {
   });
 
   describe('remove', () => {
-    it('Deve apagar um usuário pelo id', async () => {
+    it('Deve apagar um pedido pelo id', async () => {
       jest.spyOn(orderRepository, 'findOne').mockResolvedValue(OrderMock);
       jest.spyOn(orderRepository, 'delete').mockResolvedValue(null);
       const returnCreate = await orderService.remove('123asd123asd');
