@@ -21,7 +21,11 @@ export class OrderService {
   }
 
   async findAll(): Promise<OrderEntity[]> {
-    return await this.orderRepository.find();
+    try {
+      return await this.orderRepository.find();
+    } catch (err) {
+      throw new InternalServerErrorException(err);
+    }
   }
 
   async findOne(id: string) {
