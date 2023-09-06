@@ -7,6 +7,8 @@ Rode o comando para subir todos os containeres da aplicação
 ```
 sudo docker-compose up --build
 ```
+[**Documentação microsserviço usuário, com Swagger**](http://localhost:3003/api)
+[**Documentação microsserviço pedido, com Swagger**](http://localhost:3333/api)
 
 # Testes
 Realizei uma cobertura de testes unitários em cada microsserviço.

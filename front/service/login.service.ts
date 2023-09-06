@@ -24,7 +24,7 @@ export async function login(
     if (response.status === 200) {
         mensagemUsuario = 'Usuário logado com sucesso'
         setCookie(undefined, '@token', responseObj.message, {
-            maxAge: 60 //Duração do cookies 1 minuto
+            maxAge: 60 * 60 //Duração do cookies 1 hora
         });
     }
 
