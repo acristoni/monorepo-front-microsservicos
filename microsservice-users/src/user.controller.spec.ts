@@ -35,7 +35,7 @@ describe('UserController', () => {
     userService = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
+  it('Deve ser definido', () => {
     expect(userController).toBeDefined();
   });
 

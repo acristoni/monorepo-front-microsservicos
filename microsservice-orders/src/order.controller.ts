@@ -12,6 +12,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 
+@ApiBearerAuth()
 @ApiTags('Pedidos')
 @Controller()
 export class OrderController {
@@ -25,7 +26,6 @@ export class OrderController {
     return this.orderService.getHello();
   }
 
-  @ApiBearerAuth()
   @Get('find')
   @ApiOperation({
     summary: 'Lista todos os pedidos do sistema',
@@ -34,7 +34,6 @@ export class OrderController {
     return await this.orderService.findAll();
   }
 
-  @ApiBearerAuth()
   @Get('find/:id')
   @ApiOperation({
     summary: 'Exibe um pedido.',
@@ -43,7 +42,6 @@ export class OrderController {
     return await this.orderService.findOne(id);
   }
 
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({
     summary: 'Cria um novo pedido.',
@@ -52,7 +50,6 @@ export class OrderController {
     return await this.orderService.create(createOrderDto);
   }
 
-  @ApiBearerAuth()
   @Patch(':id')
   @ApiOperation({
     summary: 'Atualiza um pedido',
@@ -64,7 +61,6 @@ export class OrderController {
     return await this.orderService.update(id, updateOrderDto);
   }
 
-  @ApiBearerAuth()
   @Delete(':id')
   @ApiOperation({
     summary: 'Exclui um pedido',
