@@ -1,16 +1,18 @@
 version: '3.7'
 
 services:
-  # frontend:
-  #   build:
-  #     context: ./front
-  #   ports:
-  #     - '3000:3000'
-  #   depends_on:
-  #     - db_user
-  #     - order_mariadb
-  #     - microservice-users
-  #     - microservice-orders
+  frontend:
+    build:
+      context: ./front
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db_user
+      - order_mariadb
+      - microservice-users
+      - microservice-orders
+    networks:
+      - dev-network
 
   db_user:
     image: postgres

@@ -16,10 +16,10 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-import { UserEntity } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from './auth.guard';
+import { InfoUser } from './dto/info-user.dto';
 
 @ApiTags('Usuário')
 @Controller()
@@ -63,7 +63,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Lista todos os usuários do sistema',
   })
-  async findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<InfoUser[]> {
     return await this.userService.findAll();
   }
 
@@ -73,7 +73,7 @@ export class UserController {
   @ApiOperation({
     summary: 'Exibe um usuário.',
   })
-  async findOne(@Param('id') id: string): Promise<UserEntity> {
+  async findOne(@Param('id') id: string): Promise<InfoUser> {
     return await this.userService.findOne(id);
   }
 

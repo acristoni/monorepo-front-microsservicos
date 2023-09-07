@@ -9,8 +9,8 @@ import { ValidacaoDataNascimento } from './utils/validacoes/dataNascimento.valid
 import { ValidacaoEmail } from './utils/validacoes/email.validacao';
 import { ValidacaoNome } from './utils/validacoes/nome.validacao';
 import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.validacao';
-import UserMock from './utils/mocks/user.mock';
 import CreateUserDtoMock from './utils/mocks/createUserDto.mock';
+import InfoUserMock from './utils/mocks/infoUser.mock';
 
 describe('UserController', () => {
   let userController: UserController;
@@ -61,7 +61,7 @@ describe('UserController', () => {
 
   describe('findAll', () => {
     it('Deve retornar todos os usuários', async () => {
-      const users = [UserMock];
+      const users = [InfoUserMock];
       jest.spyOn(userService, 'findAll').mockResolvedValue(users);
 
       const result = await userController.findAll();
@@ -73,11 +73,11 @@ describe('UserController', () => {
   describe('findOne', () => {
     it('Deve retornar um usuário pelo id', async () => {
       const userId = '123asd123asd';
-      jest.spyOn(userService, 'findOne').mockResolvedValue(UserMock);
+      jest.spyOn(userService, 'findOne').mockResolvedValue(InfoUserMock);
 
       const result = await userController.findOne(userId);
 
-      expect(result).toBe(UserMock);
+      expect(result).toBe(InfoUserMock);
     });
   });
 
