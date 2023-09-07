@@ -17,6 +17,7 @@ import { ValidacaoNome } from './utils/validacoes/nome.validacao';
 import { ValidacaoEmail } from './utils/validacoes/email.validacao';
 import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.validacao';
 import { JwtService } from '@nestjs/jwt';
+import { InfoUser } from './dto/info-user.dto';
 
 @Injectable()
 export class UserService {
@@ -35,22 +36,49 @@ export class UserService {
     return 'Api funcionando!';
   }
 
-  async findAll(): Promise<UserEntity[]> {
+  async findAll(): Promise<InfoUser[]> {
     try {
-      return await this.userRepository.find();
+      const userList = await this.userRepository.find();
+
+      const userInfoList = userList.map((user) => {
+        if (user.active) {
+          const userInfo: InfoUser = {
+            id: user.id,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            birth_date: user.birth_date,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+          };
+          return userInfo;
+        } else {
+          return null;
+        }
+      });
+
+      return userInfoList.filter((user) => user !== null);
     } catch (error) {
       throw new InternalServerErrorException(error);
     }
   }
 
-  async findOne(id: string): Promise<UserEntity> {
+  async findOne(id: string): Promise<InfoUser> {
     const user = await this.userRepository.findOne({ where: { id: id } });
 
-    if (!user) {
+    if (!user || (user && !user.active)) {
       throw new NotFoundException('Usuário não encontrado');
     }
 
-    return user;
+    const userInfo: InfoUser = {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      birth_date: user.birth_date,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+
+    return userInfo;
   }
 
   async create(createUserDto: CreateUserDto) {

@@ -18,6 +18,7 @@ import { ValidacaoNumeroTelefone } from './utils/validacoes/numeroTelefone.valid
 import { JwtService } from '@nestjs/jwt';
 import CreateUserDtoMock from './utils/mocks/createUserDto.mock';
 import UserMock from './utils/mocks/user.mock';
+import InfoUserMock from './utils/mocks/infoUser.mock';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -157,7 +158,7 @@ describe('UserService', () => {
     it('Deve retornar todos os usuário.', async () => {
       jest.spyOn(userRepository, 'find').mockResolvedValue([UserMock]);
       const returnFindAll = await userService.findAll();
-      expect(returnFindAll).toStrictEqual([UserMock]);
+      expect(returnFindAll).toStrictEqual([InfoUserMock]);
     });
     it('Deve tratar um erro do tipo InternalServerErrorException', async () => {
       jest.spyOn(userRepository, 'find').mockRejectedValue(null);
@@ -174,7 +175,7 @@ describe('UserService', () => {
       jest.spyOn(userRepository, 'findOne').mockResolvedValue(UserMock);
 
       const returnClient = await userService.findOne(id);
-      expect(returnClient).toStrictEqual(UserMock);
+      expect(returnClient).toStrictEqual(InfoUserMock);
     });
 
     it('Deve tratar NotFoundException.', async () => {

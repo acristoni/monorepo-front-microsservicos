@@ -9,13 +9,31 @@ const UserMock: UserEntity = {
   phone_number: '9535651263',
   birth_date: new Date('1990-01-01'),
   active: true,
-  createdAt: new Date(),
-  updatedAt: new Date(),
+  createdAt: new Date('2023-09-01'),
+  updatedAt: new Date('2023-09-01'),
   password: '',
   setPassword: function (): void {
     throw new Error('Function not implemented.');
   },
   checkPassword: function () {
+    throw new Error('Function not implemented.');
+  },
+  setEmail: function (): void {
+    throw new Error('Function not implemented.');
+  },
+  setDocument: function (): void {
+    throw new Error('Function not implemented.');
+  },
+  setPhoneNumber: function (): void {
+    throw new Error('Function not implemented.');
+  },
+  checkEmail: function () {
+    throw new Error('Function not implemented.');
+  },
+  checkDocument: function () {
+    throw new Error('Function not implemented.');
+  },
+  checkPhoneNumber: function () {
     throw new Error('Function not implemented.');
   },
 };
