@@ -1,15 +1,17 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from "@mui/material";
 import { OrderDto } from "interfaces/orderDto.interface";
 import { SelectUsers } from "interfaces/selectUsers.interface";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { createOrder } from "service/createOrder.service";
 import ModalComplete from "./ModalComplete";
+import { User } from "interfaces/user.interface";
 
 type Props = {
     setIsDrawerOpen: (value: boolean) => void;
+    userList: User[] | undefined
 }
 
-export default function NewOrderForm({ setIsDrawerOpen }: Props) {
+export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [mensagemUsuario, setMensagemUsuario] = useState<string>('');
     const [allUsers, setAllUsers] = useState<SelectUsers[]>([
@@ -47,6 +49,20 @@ export default function NewOrderForm({ setIsDrawerOpen }: Props) {
             setIsModalOpen(true)
         }
     }
+
+    useEffect(()=>{
+        if (userList && userList.length) {
+            const optionsSelectUser = userList.map(user => {
+                const option: SelectUsers = {
+                    nome: `${user.first_name} ${user.last_name}`,
+                    id: user.id
+                };
+
+                return option;
+            })
+            setAllUsers(optionsSelectUser)
+        }
+    },[userList])
 
     return (
         <Box

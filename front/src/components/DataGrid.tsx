@@ -11,13 +11,15 @@ import { EstadoCivil } from 'enums/estadocivil.enum';
 import handleEditButton from 'utils/handleEditButton';
 import { Order } from 'interfaces/order.interface';
 import { OrderFormated } from 'interfaces/orderFormated.interface';
+import { User } from 'interfaces/user.interface';
 
 type Props =  {
   rows: Order[];
+  userList: User[] | undefined;
   // setEditClient: (editClient: { clientDto: ClientDto, idClient: string }) => void;
 }
 
-export default function DataGridClients({ rows }: Props) {
+export default function DataGridClients({ rows, userList }: Props) {
   const [rowsFormated, setRowsFormated] = useState<OrderFormated[]>([])
   const [delectedClient, setDelectedClient] = useState<string>()
   const [clientToDelete, setClientToDelete] = useState<string>()
@@ -26,14 +28,14 @@ export default function DataGridClients({ rows }: Props) {
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
     {
-      field: 'user_id',
-      headerName: 'Id Responsável',
-      width: 100,
+      field: 'responsable',
+      headerName: 'Responsável',
+      width: 200,
     },
     {
       field: 'description',
       headerName: 'Descrição',
-      width: 250,
+      width: 300,
     },
     {
       field: 'quantity',
@@ -106,10 +108,13 @@ export default function DataGridClients({ rows }: Props) {
   ];
 
   useEffect(()=>{
-    if (rows) {
+    if (rows && rows.length && userList && userList.length) {
       const arrayRowsFormated = rows.map((orderInfo: Order) => {
+        const userResponsable = userList.find(user => user.id === orderInfo.user_id);
         return {
           ...orderInfo,
+          responsable: 
+            userResponsable?.first_name ? `${userResponsable.first_name} ${userResponsable.last_name}` : 'Usuário não cadastrado',
           price: `R$ ${orderInfo.price}`,
           updatedAt: new Date(orderInfo.updatedAt),
           createdAt: new Date(orderInfo.createdAt)

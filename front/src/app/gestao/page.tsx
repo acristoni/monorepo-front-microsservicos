@@ -5,18 +5,23 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import DataGridClients from '@/components/DataGrid';
 import Button from '@mui/material/Button';
-import getClients from '../../../service/getOrders.service';
+import getOrders from '../../../service/getOrders.service';
 import { Order } from 'interfaces/order.interface';
 import { Drawer } from '@mui/material';
 import NewOrderForm from '@/components/NewOrderForm';
+import { User } from 'interfaces/user.interface';
+import getUsers from 'service/getUsers.service';
 
 export default function Gestao() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [orderList, setOrderList] = useState<Order[]>();
+  const [userList, setUserList] = useState<User[]>()
+  console.log("🚀 ~ file: page.tsx:19 ~ Gestao ~ userList:", userList)
   // const [editClient, setEditClient] = useState<{ clientDto: ClientDto, idClient: string }>();
   
   useEffect(()=>{
-    getClients(setOrderList)
+    getOrders(setOrderList)
+    getUsers(setUserList)
   },[]);
 
   // useEffect(()=>{
@@ -44,7 +49,7 @@ export default function Gestao() {
         <>
           {
             orderList ?
-            <DataGridClients rows={orderList} /> :
+            <DataGridClients rows={orderList} userList={userList}/> :
             <Typography>
               Carregando informações...
             </Typography>
@@ -68,7 +73,7 @@ export default function Gestao() {
         anchor='right'
         open={isDrawerOpen}
       >
-        <NewOrderForm setIsDrawerOpen={setIsDrawerOpen}/>
+        <NewOrderForm setIsDrawerOpen={setIsDrawerOpen} userList={userList}/>
       </Drawer>
     </Box>
   );

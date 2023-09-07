@@ -1,5 +1,5 @@
 # TechSocial - Gestão de pedidos
-Mono-repo contendo o Front-end em ReactJs(NextJs) e (2 microsserviços - usuário e pedidos)back-end em NestJs.
+Mono-repo contendo o Front-end em ReactJs(NextJs) e (2 microsserviços - usuário e pedidos)back-end em NestJs, para a TechSocial.
 
 # Subir aplicação localmente
 Rode o comando para subir todos os containeres da aplicação
@@ -7,8 +7,10 @@ Rode o comando para subir todos os containeres da aplicação
 ```
 sudo docker-compose up --build
 ```
-[**Documentação microsserviço usuário, com Swagger**](http://localhost:3003/api)
-[**Documentação microsserviço pedido, com Swagger**](http://localhost:3333/api)
+**Após subir localmente:**
+[Front-end](http://localhost:3000)
+[Documentação microsserviço usuário, com Swagger](http://localhost:3003/api)
+[Documentação microsserviço pedido, com Swagger](http://localhost:3333/api)
 
 # Testes
 Realizei uma cobertura de testes unitários em cada microsserviço.
