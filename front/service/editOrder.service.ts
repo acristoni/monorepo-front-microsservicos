@@ -1,7 +1,8 @@
 import { OrderDto } from "interfaces/orderDto.interface";
 
-export async function createOrder(
+export async function editOrder(
     formData: OrderDto,
+    orderId: string,
     setMensagemUsuario: (value: string) => void,
 ) {
     const headersList = {
@@ -11,8 +12,8 @@ export async function createOrder(
         ...formData,
     });
 
-    const response = await fetch(`${process.env.URL_FRONT}/api/order`, { 
-        method: "POST",
+    const response = await fetch(`${process.env.URL_FRONT}/api/order/${orderId}`, { 
+        method: "PATCH",
         body: bodyContent,
         headers: headersList
     });

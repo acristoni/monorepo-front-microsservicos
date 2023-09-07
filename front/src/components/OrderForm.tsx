@@ -5,25 +5,21 @@ import { useEffect, useState } from "react";
 import { createOrder } from "service/createOrder.service";
 import ModalComplete from "./ModalComplete";
 import { User } from "interfaces/user.interface";
+import { EditOrCreate } from "enums/editOrCreate.enum";
+import { editOrder as editOrderService } from "service/editOrder.service";
 
 type Props = {
+    isDrawerOpen: boolean;
     setIsDrawerOpen: (value: boolean) => void;
-    userList: User[] | undefined
+    userList: User[] | undefined;
+    editOrder: { orderDto: OrderDto, idOrder: string } | undefined;
 }
 
-export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
+export default function OrderForm({ isDrawerOpen, setIsDrawerOpen, userList, editOrder }: Props) {
+    const [editOrCreate, setEditOrCreate] = useState<EditOrCreate>(EditOrCreate.CREATE)
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [mensagemUsuario, setMensagemUsuario] = useState<string>('');
-    const [allUsers, setAllUsers] = useState<SelectUsers[]>([
-        {
-            nome: 'João',
-            id: '123asd123asd1'
-        },
-        {
-            nome: 'Maria',
-            id: 'asd123asd123'
-        }
-    ]);
+    const [allUsers, setAllUsers] = useState<SelectUsers[]>([]);
     const [formData, setFormData] = useState<OrderDto>({
         "user_id": "",
         "description": "",
@@ -50,6 +46,19 @@ export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
         }
     }
 
+    const saveEditOrder = async() => {
+        if (editOrder && editOrder.idOrder) {
+            const responseEditOrder = await editOrderService(
+                formData, 
+                editOrder.idOrder, 
+                setMensagemUsuario
+            )
+            if (responseEditOrder) {
+                setIsModalOpen(true)
+            }
+        }
+    }
+
     useEffect(()=>{
         if (userList && userList.length) {
             const optionsSelectUser = userList.map(user => {
@@ -63,6 +72,28 @@ export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
             setAllUsers(optionsSelectUser)
         }
     },[userList])
+
+    useEffect(()=>{
+        if (editOrder) {
+            setFormData({
+                ...editOrder.orderDto,
+            });
+            setEditOrCreate(EditOrCreate.EDIT);
+        }
+    },[editOrder])
+
+    useEffect(()=>{
+        if (!isDrawerOpen) {
+            setEditOrCreate(EditOrCreate.CREATE);
+            setFormData({
+                "user_id": "",
+                "description": "",
+                "quantity": 0,
+                "price": 0
+            });
+            console.log('eita')
+        }
+    },[isDrawerOpen])
 
     return (
         <Box
@@ -83,7 +114,7 @@ export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
                 fontSize="25px"         
                 sx={{ marginBottom: 5 }}
             > 
-                Novo Pedido
+                { editOrCreate === EditOrCreate.EDIT ? 'Editar Pedido' : 'Novo Pedido' }
             </Typography>
             <FormControl fullWidth>
                 <InputLabel 
@@ -131,14 +162,25 @@ export default function NewOrderForm({ setIsDrawerOpen, userList }: Props) {
                 sx={{ marginBottom: 5 }}
                 type="number"
             />
-            <Button
-                variant="contained" 
-                onClick={saveNewOrder}
-                color="primary"
-                sx={{ marginBottom: 2 }}
-            >
-                SALVAR
-            </Button>
+            {
+                editOrCreate === EditOrCreate.EDIT ?
+                <Button
+                    variant="contained" 
+                    onClick={saveEditOrder}
+                    color="primary"
+                    sx={{ marginBottom: 2 }}
+                >
+                    EDITAR
+                </Button> :
+                <Button
+                    variant="contained" 
+                    onClick={saveNewOrder}
+                    color="primary"
+                    sx={{ marginBottom: 2 }}
+                >
+                    SALVAR
+                </Button>
+            }
             <Button
                 variant="contained" 
                 onClick={()=>setIsDrawerOpen(false)}

@@ -8,27 +8,27 @@ import Button from '@mui/material/Button';
 import getOrders from '../../../service/getOrders.service';
 import { Order } from 'interfaces/order.interface';
 import { Drawer } from '@mui/material';
-import NewOrderForm from '@/components/NewOrderForm';
+import OrderForm from '@/components/OrderForm';
 import { User } from 'interfaces/user.interface';
 import getUsers from 'service/getUsers.service';
+import { OrderDto } from 'interfaces/orderDto.interface';
 
 export default function Gestao() {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const [orderList, setOrderList] = useState<Order[]>();
   const [userList, setUserList] = useState<User[]>()
-  console.log("🚀 ~ file: page.tsx:19 ~ Gestao ~ userList:", userList)
-  // const [editClient, setEditClient] = useState<{ clientDto: ClientDto, idClient: string }>();
+  const [editOrder, setEditOrder] = useState<{ orderDto: OrderDto, idOrder: string } | undefined>();
   
   useEffect(()=>{
     getOrders(setOrderList)
     getUsers(setUserList)
   },[]);
 
-  // useEffect(()=>{
-  //   if (editClient) {
-  //     setIsDrawerOpen(true)
-  //   }
-  // },[editClient])
+  useEffect(()=>{
+    if (editOrder) {
+      setIsDrawerOpen(true)
+    }
+  },[editOrder])
 
   return (
     <Box
@@ -49,14 +49,21 @@ export default function Gestao() {
         <>
           {
             orderList ?
-            <DataGridClients rows={orderList} userList={userList}/> :
+            <DataGridClients 
+              rows={orderList} 
+              userList={userList}
+              setEditOrder={setEditOrder}  
+            /> :
             <Typography>
               Carregando informações...
             </Typography>
           }
         </>
         <Button 
-          onClick={() => setIsDrawerOpen(!isDrawerOpen)} 
+          onClick={() => {
+            setEditOrder(undefined)
+            setIsDrawerOpen(!isDrawerOpen)
+          }} 
           variant="contained" 
           color={ !isDrawerOpen ? "primary" : "error" }
           sx={{
@@ -73,7 +80,12 @@ export default function Gestao() {
         anchor='right'
         open={isDrawerOpen}
       >
-        <NewOrderForm setIsDrawerOpen={setIsDrawerOpen} userList={userList}/>
+        <OrderForm 
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen} 
+          userList={userList}
+          editOrder={editOrder}
+        />
       </Drawer>
     </Box>
   );

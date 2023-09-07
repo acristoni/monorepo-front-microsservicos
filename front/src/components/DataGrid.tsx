@@ -1,29 +1,21 @@
 import { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import { DataGrid, GridColDef, ptBR } from '@mui/x-data-grid';
-import formatarCPF from 'utils/formatCpf';
-import upperCaseFirstLetter from 'utils/upperCaseFirstLetter';
-import formatStringToDate from 'utils/formatStringToDate';
-import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit'; 
-import ModalDeleteClient from './ModalDeleteClient';
-import { EstadoCivil } from 'enums/estadocivil.enum';
-import handleEditButton from 'utils/handleEditButton';
 import { Order } from 'interfaces/order.interface';
 import { OrderFormated } from 'interfaces/orderFormated.interface';
 import { User } from 'interfaces/user.interface';
+import { OrderDto } from 'interfaces/orderDto.interface';
+import handleEditButton from 'utils/handleEditButton';
 
 type Props =  {
   rows: Order[];
   userList: User[] | undefined;
-  // setEditClient: (editClient: { clientDto: ClientDto, idClient: string }) => void;
+  setEditOrder: (editClient: { orderDto: OrderDto, idOrder: string }) => void;
 }
 
-export default function DataGridClients({ rows, userList }: Props) {
+export default function DataGridClients({ rows, userList, setEditOrder }: Props) {
   const [rowsFormated, setRowsFormated] = useState<OrderFormated[]>([])
-  const [delectedClient, setDelectedClient] = useState<string>()
-  const [clientToDelete, setClientToDelete] = useState<string>()
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const columns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 100 },
@@ -63,29 +55,6 @@ export default function DataGridClients({ rows, userList }: Props) {
       type: 'date'
     },
     {
-      field: 'delete',
-      headerName: 'Apagar',
-      width: 100,
-      sortable: false,
-      filterable: false,
-      renderCell: (params) => (
-        <button
-          id="ButtonDelete"
-          onClick={() => {            
-            setClientToDelete(params.row.id)
-            setIsDeleteModalOpen(true);
-          }}
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-          }}
-        >
-          <DeleteIcon color="error" />
-        </button>
-      ),
-    },
-    {
       field: 'edit',
       headerName: 'Editar',
       width: 100,
@@ -94,7 +63,7 @@ export default function DataGridClients({ rows, userList }: Props) {
       renderCell: (params) => (
         <button
         id="ButtonEditar"
-          // onClick={()=>handleEditButton(params, setEditClient)}
+          onClick={()=>handleEditButton(params, setEditOrder, rows)}
           style={{
             background: 'none',
             border: 'none',
@@ -124,13 +93,6 @@ export default function DataGridClients({ rows, userList }: Props) {
     }
   },[rows])
 
-  useEffect(()=>{
-    if (delectedClient) {
-      const arrayWithoutDelected = rowsFormated.filter(client => client.id !== delectedClient);
-      setRowsFormated(arrayWithoutDelected);
-    }
-  },[delectedClient])
-
   return (
     <Box sx={{ height: 630, width: '100%' }}>
       <DataGrid
@@ -146,12 +108,6 @@ export default function DataGridClients({ rows, userList }: Props) {
         pageSizeOptions={[10]}
         disableRowSelectionOnClick
         localeText={ptBR.components.MuiDataGrid.defaultProps.localeText}
-      />
-      <ModalDeleteClient 
-        setIsDeleteModalOpen={setIsDeleteModalOpen} 
-        isDeleteModalOpen={isDeleteModalOpen} 
-        setDelectedClient={setDelectedClient} 
-        clientToDelete={clientToDelete} 
       />
     </Box>
   );

@@ -1,34 +1,24 @@
-import { EstadoCivil } from "enums/estadocivil.enum";
+import { Order } from "interfaces/order.interface";
+import { OrderDto } from "interfaces/orderDto.interface";
 
-export default function handleEditButton(params: any, setEditClient: (editClient: { clientDto: any, idClient: string }) => void) {
-    let estadoCivilEdit: EstadoCivil;
-
-    switch (params.row.estadoCivil) {
-        case 'Solteiro':
-        estadoCivilEdit = EstadoCivil.SOLTEIRO;
-        break;
-        case 'Divorciado':
-        estadoCivilEdit = EstadoCivil.DIVORCIADO;
-        break;
-        case 'Viuvo':
-        estadoCivilEdit = EstadoCivil.VIUVO;
-        break;
-        case 'Casado':
-        estadoCivilEdit = EstadoCivil.CASADO;
-        break;
-        default:
-        estadoCivilEdit = EstadoCivil.SOLTEIRO;
-        break;
+export default function handleEditButton(
+    params: any, 
+    setEditOrder: (editClient: { orderDto: OrderDto, idOrder: string }) => void,
+    rows: Order[]
+) {
+    const order = rows.find(order => order.id === params.row.id)
+    
+    if (order) {
+        const orderDto: OrderDto = {
+            user_id: order.user_id,
+            description: order.description,
+            quantity: order.quantity,
+            price: order.price,
+        }
+    
+        setEditOrder({
+            orderDto,
+            idOrder: params.row.id
+        })
     }
-    const clientDto: any = {
-        nome: params.row.nome,
-        dataNascimento: params.row.dataNascimento,
-        cpf: params.row.cpf,
-        estadoCivil: estadoCivilEdit,
-    }
-
-    setEditClient({
-        clientDto,
-        idClient: params.row.id
-    })
 }
